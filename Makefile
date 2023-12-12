@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -Werror
 INC = include/
-LIBS = -lm
+LIBS = -lm -lsfml-graphics -lsfml-window -lsfml-system
 SRC = src/
 BUILD = build/
 EXEC = main
