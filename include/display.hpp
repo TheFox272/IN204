@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include <cstdlib>
+
+#include <SFML/Graphics.hpp>
+
 #include "game.hpp"
-#include "display.hpp"
 
 /*----------------------------------------------------------------------------------------------------*/
 
-
+int play(Game, bool);
