@@ -12,14 +12,14 @@ all: $(BUILD)$(EXEC)
 $(BUILD)$(EXEC): $(BUILD)main.o $(BUILD)game.o $(BUILD)display.o
 	$(CC) $(CFLAGS) -g $^ -o $@ $(LIBS)
 
-$(BUILD)main.o: $(SRC)main.cpp
+$(BUILD)main.o: $(SRC)main.cpp $(INC)main.hpp
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I $(INC) -g -c $< -o $@
 
-$(BUILD)game.o: $(SRC)game.cpp
+$(BUILD)game.o: $(SRC)game.cpp $(INC)game.hpp
 	$(CC) $(CFLAGS) -I $(INC) -g -c $< -o $@
 
-$(BUILD)display.o: $(SRC)display.cpp
+$(BUILD)display.o: $(SRC)display.cpp $(INC)display.hpp
 	$(CC) $(CFLAGS) -I $(INC) -g -c $< -o $@
 
 

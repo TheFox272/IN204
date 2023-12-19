@@ -16,8 +16,7 @@ int main(int argc, char** argv){
 
     if (argc == 1)
     {
-        Game game;
-        play(game, false);
+        play(false);
     }
     else
     {

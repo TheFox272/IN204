@@ -6,107 +6,73 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
-int play(Game game, bool aiPlayer)
+int play(bool singlePlayer)
 {
-    int statut;
+    int statut = 0;
 
     /* #region Window initialization */
-    sf::RenderWindow window(sf::VideoMode(800, 600), gameName, sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), gameName, sf::Style::Fullscreen);
     window.setVerticalSyncEnabled(true);
-    // window.setKeyRepeatEnabled(false);
+    sf::View mainView(window.getDefaultView());
+    window.setView(mainView);
     /* #endregion */
 
+    /* #region  Game initialization*/
+    Game game(window.getSize());
+    /* #endregion */
 
     while (window.isOpen())
     {
+        game.update();
+        mainView.move(0, -game.getSpeed());
+        window.setView(mainView);
+
         sf::Event event;
         while (window.pollEvent(event))
-        {   
-                switch (event.type)
-                {
-                    // window closed
-                    case sf::Event::Closed:
-                        window.close();
-                        break;
+        {
+            switch (event.type)
+            {
+                // window closed
+                case sf::Event::Closed:
+                    window.close();
+                    break;
 
-                    case sf::Event::LostFocus:
-                        game.pause();
-                        break;
+                case sf::Event::LostFocus:
+                    game.pause();
+                    break;
 
-                    case sf::Event::GainedFocus:
-                        game.resume();
-                        break;
+                case sf::Event::GainedFocus:
+                    game.resume();
+                    break;
 
-                    case sf::Event::KeyPressed:
-                        switch (event.key.code)
-                        {
-                            case sf::Keyboard::Escape:
-                                statut = -1;
-                                std::cout << "manual interruption of game\n";
-                                goto Quit;
-                            
-                            case sf::Keyboard::Q:
-                                game.movesLeft(1);
-                                break;
-                            
-                            case sf::Keyboard::D:
-                                game.movesRight(1);
-                                break;
-                            
-                            case sf::Keyboard::Left:
-                                game.movesLeft(2);
-                                break;
-                            
-                            case sf::Keyboard::Right:
-                                game.movesRight(2);
-                                break;
-                            
-                            default:
-                                break;
-                        }
-                        break;
-                    
-                    case sf::Event::KeyReleased:
-                        switch (event.key.code)
-                        {
-                            case sf::Keyboard::Q:
-                                game.stops(1);
-                                break;
-                            
-                            case sf::Keyboard::D:
-                                game.stops(1);
-                                break;
-                            
-                            case sf::Keyboard::Left:
-                                game.stops(2);
-                                break;
-                            
-                            case sf::Keyboard::Right:
-                                game.stops(2);
-                                break;
-                            
-                            default:
-                                break;
-                        }
-                        break;
+                case sf::Event::KeyPressed:
+                    switch (event.key.code)
+                    {
+                        case sf::Keyboard::Escape:
+                            statut = -1;
+                            std::cout << "manual interruption of game\n";
+                            goto Quit;
 
+                        default:
+                            break;
+                    }
+                    break;
 
-                    // other types of events not processed
-                    default:
-                        break;
-                }
+                // other types of events not processed
+                default:
+                    break;
+            }
         }
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
 
+        window.draw(game.p1);
+        window.draw(game.p2);
 
-
-
-
+        
         window.display();
     }
 
 Quit:
-
 
     return statut;
 }
