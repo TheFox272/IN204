@@ -9,8 +9,9 @@ The background :
     with the edges of the bridge being known by two limit x-axis values
 
     The width of the road does not vary
-    Road shapes : | | , ||,  /| , \| , |\ , |/
-        (2 lanes & 3 lane strait roads)
+    Road shapes : | |  , ||x2,  (2 lanes & 3 lanes strait roads)
+    /| , \| , |\ , |/
+        
     
 
 
