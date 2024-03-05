@@ -11,6 +11,8 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
+class Game;
+
 class Player: public sf::Sprite
 {
     private:
@@ -18,8 +20,9 @@ class Player: public sf::Sprite
         sf::Texture texture;
 
     public:
+        sf::Vector2f inertia;
 
-        Player(bool is_p1): life(3)
+        Player(bool is_p1): life(3), inertia(0, 0)
         {
             if (is_p1)
                 texture.loadFromFile("../images/player1.png");
@@ -31,6 +34,7 @@ class Player: public sf::Sprite
             setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
         }
 
+        void bump(const Player p2, Game *game);
 
         ~Player()
         {}
@@ -116,6 +120,8 @@ class Game
         std::vector<bool> transitionRoads;
         sf::RenderWindow * window;
         sf::Music music;
+        sf::SoundBuffer bumpBuffer;
+        sf::SoundBuffer explosionBuffer;
 
         const bool playerDeath(Player &);
 
@@ -127,6 +133,8 @@ class Game
         Tile tile3;
         Info score;
         Explosion explosion;
+        sf::Sound bumpSound;
+        sf::Sound explosionSound;
     
         Game(sf::RenderWindow * w):
             gen(rd()),
@@ -142,6 +150,8 @@ class Game
             score(sf::Vector2f(10.f, 10.f))
         {   
             startMusic(music);
+            initializeBump(bumpBuffer, bumpSound);
+            initializeExplosion(explosionBuffer, explosionSound);
 
             p1.setRotation(270);
             p1.setScale(0.2, 0.2);

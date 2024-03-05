@@ -7,7 +7,10 @@
 #define sideSpeed 5.f
 #define thrustSpeed 6.f
 #define slowSpeed 5.f
-#define pushSpeed 3.f
+#define XpushSpeed 0.2f
+#define YpushSpeed 0.1f
+#define inertiaLoss 0.8f
+#define moveThreshold 0.1f
 
 #define roadWidth 201.f
 #define nRoads 5.f
@@ -30,33 +33,46 @@ int Game::update(){
 
     p1.move(sf::Vector2f(0, -speed));
     p2.move(sf::Vector2f(0, -speed));
-
-    // code for car collision
-    if (0){
-
+    
+    if (p1.getGlobalBounds().intersects(p2.getGlobalBounds())){
+        p1.bump(p2, this);
+        p2.bump(p1, this);
     }
-    // if (p1.getGlobalBounds().intersects(p2.getGlobalBounds())){
-        
-    // }
-    else{
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            p1.move(sf::Vector2f(-sideSpeed, 0));
-        else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            p1.move(sf::Vector2f(sideSpeed, 0));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            p1.move(sf::Vector2f(0, -thrustSpeed));
-        else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            p1.move(sf::Vector2f(0, slowSpeed));
-        
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            p2.move(sf::Vector2f(-sideSpeed, 0));
-        else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            p2.move(sf::Vector2f(sideSpeed, 0));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            p2.move(sf::Vector2f(0, -thrustSpeed));
-        else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            p2.move(sf::Vector2f(0, slowSpeed));
+
+    if (p1.inertia.x > moveThreshold || p1.inertia.x < -moveThreshold){
+        p1.move(sf::Vector2f(p1.inertia.x, 0));
+        p1.inertia.x = p1.inertia.x * inertiaLoss;
     }
+    if (p1.inertia.y > moveThreshold || p1.inertia.y < -moveThreshold){
+        p1.move(sf::Vector2f(0, p1.inertia.y));
+        p1.inertia.y = p1.inertia.y * inertiaLoss;
+    }
+    if (p2.inertia.x > moveThreshold || p2.inertia.x < -moveThreshold){
+        p2.move(sf::Vector2f(p2.inertia.x, 0));
+        p2.inertia.x = p2.inertia.x * inertiaLoss;
+    }
+    if (p2.inertia.y > moveThreshold || p2.inertia.y < -moveThreshold){
+        p2.move(sf::Vector2f(0, p2.inertia.y));
+        p2.inertia.y = p2.inertia.y * inertiaLoss;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        p1.move(sf::Vector2f(-sideSpeed, 0));
+    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        p1.move(sf::Vector2f(sideSpeed, 0));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        p1.move(sf::Vector2f(0, -thrustSpeed));
+    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        p1.move(sf::Vector2f(0, slowSpeed));
+    
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        p2.move(sf::Vector2f(-sideSpeed, 0));
+    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        p2.move(sf::Vector2f(sideSpeed, 0));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        p2.move(sf::Vector2f(0, -thrustSpeed));
+    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        p2.move(sf::Vector2f(0, slowSpeed));
 
     tileProgress += speed;
     if (tileProgress >= tileMax){
@@ -247,6 +263,7 @@ int Game::gameOver(Player *deadPlayer){
 void Game::addExplosion(const sf::Vector2f& position){
     explosion.setPosition(position);
     explosion.is_displayed = true;
+    explosionSound.play();
 };
 
 int Game::pause(){
@@ -292,4 +309,9 @@ double Tile::width(){
     return texture.getSize().x * getScale().x;
 }
 
+void Player::bump(const Player p, Game *game){
+    game->bumpSound.play();
+    inertia.x = (getPosition().x - p.getPosition().x) * XpushSpeed;
+    inertia.y = (getPosition().y - p.getPosition().y) * YpushSpeed;
+}
 

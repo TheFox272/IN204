@@ -36,4 +36,6 @@ void startMusic(sf::Music&);
 
 void stopMusic(sf::Music&);
 
-void playBump();
+void initializeBump(sf::SoundBuffer&, sf::Sound&);
+
+void initializeExplosion(sf::SoundBuffer&, sf::Sound&);
