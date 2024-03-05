@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "game.hpp"
-#include "events.hpp"
+#include "effects.hpp"
 
 /*----------------------------------------------------------------------------------------------------*/
 

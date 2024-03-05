@@ -16,6 +16,16 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
+int Game::updatePause(){
+    if (explosion.is_displayed){
+        sf::sleep(sf::milliseconds(100));
+        if (!explosion.update()){
+            explosion.is_displayed = false;
+        }
+    }
+    return 0;
+}
+
 int Game::update(){
 
     p1.move(sf::Vector2f(0, -speed));
@@ -54,9 +64,7 @@ int Game::update(){
         tileChange();
     }
 
-    
-
-    const Player *deadPlayer = checkDeath();
+    Player *deadPlayer = checkDeath();
     if (deadPlayer != NULL)
         gameOver(deadPlayer);
 
@@ -189,7 +197,7 @@ Tile *Game::getNextTile(Tile *tile){
         return &tile1;
 }
 
-const Player *Game::checkDeath(){
+Player *Game::checkDeath(){
     if (playerDeath(p1))
         return &p1;
     else if (playerDeath(p2))
@@ -226,28 +234,38 @@ const bool Game::playerDeath(Player &p){
     return false;
 }
 
-int Game::gameOver(const Player *deadPlayer){
+int Game::gameOver(Player *deadPlayer){
 
     pause();
-    showExplosion(*window, deadPlayer->getPosition());
+    addExplosion(deadPlayer->getPosition());
+    deadPlayer->setColor(sf::Color(255, 255, 255, 0));
     std::cout << "Player " << ((deadPlayer == &p1) ? 1 : 2) << " died..." << std::endl;
 
     return 0;
 }
 
+void Game::addExplosion(const sf::Vector2f& position){
+    explosion.setPosition(position);
+    explosion.is_displayed = true;
+};
+
 int Game::pause(){
     if (paused)
         wasPaused = true;
-    else
+    else{
         paused = true;
+        music.pause();
+    }
     return 0;
 }
 
 int Game::resume(){
     if (wasPaused)
         wasPaused = false;
-    else
+    else{
         paused = false;
+        music.play();
+    }
     return 0;
 }
 

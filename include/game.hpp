@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "events.hpp"
+#include "effects.hpp"
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -115,6 +115,7 @@ class Game
         Tile *currentTile;
         std::vector<bool> transitionRoads;
         sf::RenderWindow * window;
+        sf::Music music;
 
         const bool playerDeath(Player &);
 
@@ -125,6 +126,7 @@ class Game
         Tile tile2;
         Tile tile3;
         Info score;
+        Explosion explosion;
     
         Game(sf::RenderWindow * w):
             gen(rd()),
@@ -138,7 +140,9 @@ class Game
             p1(true),
             p2(false),
             score(sf::Vector2f(10.f, 10.f))
-        {
+        {   
+            startMusic(music);
+
             p1.setRotation(270);
             p1.setScale(0.2, 0.2);
             p1.setPosition(sf::Vector2f(window->getSize().x * 0.4, window->getSize().y * 0.7));
@@ -165,11 +169,13 @@ class Game
 
         int update();
 
+        int updatePause();
+
         int tileChange();
 
         int checkCollision();
 
-        const Player *checkDeath();
+        Player *checkDeath();
 
         int pause();
 
@@ -181,7 +187,9 @@ class Game
 
         Tile *getNextTile(Tile *);
 
-        int gameOver(const Player *);
+        int gameOver(Player *);
+
+        void addExplosion(const sf::Vector2f &);
 
         ~Game()
         {}

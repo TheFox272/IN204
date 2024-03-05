@@ -17,11 +17,6 @@ int play(bool singlePlayer)
     window.setView(mainView);
     /* #endregion */
 
-    /* #region music initialization */
-    sf::Music &music = *new sf::Music();
-    startMusic(music);
-    /* #endregion */
-
     /* #region  Game initialization*/
     Game game(&window);
     /* #endregion */
@@ -33,6 +28,10 @@ int play(bool singlePlayer)
             game.update();
             mainView.move(0, -game.getSpeed());
             window.setView(mainView);
+        }
+        else
+        {
+            game.updatePause();
         }
 
         sf::Event event;
@@ -83,11 +82,14 @@ int play(bool singlePlayer)
         window.draw(game.p1);
         window.draw(game.p2);
         window.draw(game.score);
+        if (game.explosion.is_displayed)
+        {
+            window.draw(game.explosion);
+        }
 
         window.display();
     }
 
 Quit:
-
     return statut;
 }
