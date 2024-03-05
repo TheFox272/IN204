@@ -5,7 +5,7 @@
     stopMusic();
 To be included in the main, or when a key is pressed ??
 */
-void startMusic() {
+void startMusic(sf::Music& music) {
     const std::string filename = "../sound/ambiant_music.m4a";
 
     if (!music.openFromFile(filename)) {
@@ -16,7 +16,7 @@ void startMusic() {
     music.play();
 }
 
-void stopMusic() {
+void stopMusic(sf::Music& music) {
     music.stop();
 }
 

@@ -17,58 +17,73 @@ int play(bool singlePlayer)
     window.setView(mainView);
     /* #endregion */
 
+    /* #region music initialization */
+    sf::Music &music = *new sf::Music();
+    startMusic(music);
+    /* #endregion */
+
     /* #region  Game initialization*/
-    Game game(window.getSize());
+    Game game(&window);
     /* #endregion */
 
     while (window.isOpen())
     {
-        game.update();
-        mainView.move(0, -game.getSpeed());
-        window.setView(mainView);
+        if (!game.getPaused())
+        {
+            game.update();
+            mainView.move(0, -game.getSpeed());
+            window.setView(mainView);
+        }
 
         sf::Event event;
         while (window.pollEvent(event))
         {
             switch (event.type)
             {
-                // window closed
-                case sf::Event::Closed:
-                    window.close();
+            // window closed
+            case sf::Event::Closed:
+                window.close();
+                break;
+
+            case sf::Event::LostFocus:
+                game.pause();
+                break;
+
+            case sf::Event::GainedFocus:
+                game.resume();
+                break;
+
+            case sf::Event::KeyPressed:
+                switch (event.key.code)
+                {
+                case sf::Keyboard::Escape:
+                    statut = -1;
+                    std::cout << "manual interruption of game\n";
+                    goto Quit;
+
+                case sf::Keyboard::P:
+                    game.switchPause();
                     break;
 
-                case sf::Event::LostFocus:
-                    game.pause();
-                    break;
-
-                case sf::Event::GainedFocus:
-                    game.resume();
-                    break;
-
-                case sf::Event::KeyPressed:
-                    switch (event.key.code)
-                    {
-                        case sf::Keyboard::Escape:
-                            statut = -1;
-                            std::cout << "manual interruption of game\n";
-                            goto Quit;
-
-                        default:
-                            break;
-                    }
-                    break;
-
-                // other types of events not processed
                 default:
                     break;
+                }
+                break;
+
+            // other types of events not processed
+            default:
+                break;
             }
         }
         window.clear(sf::Color::White);
 
+        window.draw(game.tile1);
+        window.draw(game.tile2);
+        window.draw(game.tile3);
         window.draw(game.p1);
         window.draw(game.p2);
+        window.draw(game.score);
 
-        
         window.display();
     }
 
