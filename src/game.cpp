@@ -31,6 +31,7 @@ int Game::updatePause(){
 
 int Game::update(){
 
+    progression += speed;
     p1.move(sf::Vector2f(0, -speed));
     p2.move(sf::Vector2f(0, -speed));
     
@@ -73,6 +74,15 @@ int Game::update(){
         p2.move(sf::Vector2f(0, -thrustSpeed));
     else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         p2.move(sf::Vector2f(0, slowSpeed));
+
+    if (p1.getPosition().y > window->getSize().y - progression - p1.getGlobalBounds().height / 2)
+        p1.setPosition(p1.getPosition().x, window->getSize().y - progression - p1.getGlobalBounds().height / 2);
+    else if (p1.getPosition().y < -progression + p1.getGlobalBounds().height / 2)
+        p1.setPosition(p1.getPosition().x, -progression + p1.getGlobalBounds().height / 2);
+    if (p2.getPosition().y > window->getSize().y - progression - p2.getGlobalBounds().height / 2)
+        p2.setPosition(p2.getPosition().x, window->getSize().y - progression - p2.getGlobalBounds().height / 2);
+    else if (p2.getPosition().y < -progression + p2.getGlobalBounds().height / 2)
+        p2.setPosition(p2.getPosition().x, -progression + p2.getGlobalBounds().height / 2);
 
     tileProgress += speed;
     if (tileProgress >= tileMax){

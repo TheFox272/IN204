@@ -112,6 +112,7 @@ class Game
 
         u_int8_t difficulty;  // Difficulty : 1 = easy, 2 = average, 3 = hard
         double speed;
+        double progression;
         bool paused;
         bool wasPaused;
         double tileProgress;
@@ -141,6 +142,7 @@ class Game
             dis(0.0, 1.0),
             difficulty(1),
             speed(5),
+            progression(0),
             paused(false),
             tileProgress(0),
             transitionRoads {false, false, false, false, false},
