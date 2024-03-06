@@ -30,7 +30,6 @@ void stopMusic(sf::Music& music) {
 }
 
 void initializeBump(sf::SoundBuffer& buffer, sf::Sound& sound){
-    /*Cette fonction joue un son de choc lorsquelle est appelée*/
     const std::string filePath = "../sound/bump.wav";
     if (!buffer.loadFromFile(filePath)) {
         std::cerr << "Erreur lors du chargement du fichier audio." << std::endl;
@@ -41,7 +40,6 @@ void initializeBump(sf::SoundBuffer& buffer, sf::Sound& sound){
 }
 
 void initializeExplosion(sf::SoundBuffer& buffer, sf::Sound& sound){
-    /*Cette fonction joue un son de choc lorsquelle est appelée*/
     const std::string filePath = "../sound/Explosion 5.wav";
     if (!buffer.loadFromFile(filePath)) {
         std::cerr << "Erreur lors du chargement du fichier audio." << std::endl;

@@ -1,0 +1,119 @@
+\doxysection{C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/src/game.cpp File Reference}
+\hypertarget{game_8cpp}{}\label{game_8cpp}\index{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/src/game.cpp@{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/src/game.cpp}}
+{\ttfamily \#include "{}game.\+hpp"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a3e78c0e2a2b39d37a39408d8d7271416}{acceleration}}~0.\+001f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_ae8996b825d087c3183839a541214c9d1}{side\+Speed}}~5.f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a7f9a5de14c9e9568fb5875b56bebc561}{thrust\+Speed}}~6.f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_afc41c0e0b7de5b13f10801713eb5f2f5}{slow\+Speed}}~5.f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a294fe3de2156d6ed437dfb39276879e3}{Xpush\+Speed}}~0.\+2f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_af3c41e5c56189a91a9830d9a066ec15b}{Ypush\+Speed}}~0.\+1f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a2647a32b7bc093ed191b6a3eafa70903}{inertia\+Loss}}~0.\+8f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_aa444b8a9bced224c577521e70e94451b}{move\+Threshold}}~0.\+1f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a977be378d80bae0584b23c869abe450c}{road\+Width}}~201.f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_a89258f5a74a325a1dc1304ba5303c774}{n\+Roads}}~5.f
+\item 
+\#define \mbox{\hyperlink{game_8cpp_ac354c82a9b1544178715f1dc85a4338c}{change\+Chance}}~0.\+2f
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{game_8cpp_ad24635f007ad60cecc1c1173285dcfaf}{are\+Equal}} (const std\+::vector$<$ bool $>$ \&roads1, const std\+::vector$<$ bool $>$ \&roads2)
+\item 
+void \mbox{\hyperlink{game_8cpp_a12977e014e810b106b309ddafa445087}{display\+Vector}} (const std\+::vector$<$ bool $>$ \&vec)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{game_8cpp_a3e78c0e2a2b39d37a39408d8d7271416}\label{game_8cpp_a3e78c0e2a2b39d37a39408d8d7271416} 
+\index{game.cpp@{game.cpp}!acceleration@{acceleration}}
+\index{acceleration@{acceleration}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{acceleration}{acceleration}}
+{\footnotesize\ttfamily \#define acceleration~0.\+001f}
+
+\Hypertarget{game_8cpp_ac354c82a9b1544178715f1dc85a4338c}\label{game_8cpp_ac354c82a9b1544178715f1dc85a4338c} 
+\index{game.cpp@{game.cpp}!changeChance@{changeChance}}
+\index{changeChance@{changeChance}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{changeChance}{changeChance}}
+{\footnotesize\ttfamily \#define change\+Chance~0.\+2f}
+
+\Hypertarget{game_8cpp_a2647a32b7bc093ed191b6a3eafa70903}\label{game_8cpp_a2647a32b7bc093ed191b6a3eafa70903} 
+\index{game.cpp@{game.cpp}!inertiaLoss@{inertiaLoss}}
+\index{inertiaLoss@{inertiaLoss}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{inertiaLoss}{inertiaLoss}}
+{\footnotesize\ttfamily \#define inertia\+Loss~0.\+8f}
+
+\Hypertarget{game_8cpp_aa444b8a9bced224c577521e70e94451b}\label{game_8cpp_aa444b8a9bced224c577521e70e94451b} 
+\index{game.cpp@{game.cpp}!moveThreshold@{moveThreshold}}
+\index{moveThreshold@{moveThreshold}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{moveThreshold}{moveThreshold}}
+{\footnotesize\ttfamily \#define move\+Threshold~0.\+1f}
+
+\Hypertarget{game_8cpp_a89258f5a74a325a1dc1304ba5303c774}\label{game_8cpp_a89258f5a74a325a1dc1304ba5303c774} 
+\index{game.cpp@{game.cpp}!nRoads@{nRoads}}
+\index{nRoads@{nRoads}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{nRoads}{nRoads}}
+{\footnotesize\ttfamily \#define n\+Roads~5.f}
+
+\Hypertarget{game_8cpp_a977be378d80bae0584b23c869abe450c}\label{game_8cpp_a977be378d80bae0584b23c869abe450c} 
+\index{game.cpp@{game.cpp}!roadWidth@{roadWidth}}
+\index{roadWidth@{roadWidth}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{roadWidth}{roadWidth}}
+{\footnotesize\ttfamily \#define road\+Width~201.f}
+
+\Hypertarget{game_8cpp_ae8996b825d087c3183839a541214c9d1}\label{game_8cpp_ae8996b825d087c3183839a541214c9d1} 
+\index{game.cpp@{game.cpp}!sideSpeed@{sideSpeed}}
+\index{sideSpeed@{sideSpeed}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{sideSpeed}{sideSpeed}}
+{\footnotesize\ttfamily \#define side\+Speed~5.f}
+
+\Hypertarget{game_8cpp_afc41c0e0b7de5b13f10801713eb5f2f5}\label{game_8cpp_afc41c0e0b7de5b13f10801713eb5f2f5} 
+\index{game.cpp@{game.cpp}!slowSpeed@{slowSpeed}}
+\index{slowSpeed@{slowSpeed}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{slowSpeed}{slowSpeed}}
+{\footnotesize\ttfamily \#define slow\+Speed~5.f}
+
+\Hypertarget{game_8cpp_a7f9a5de14c9e9568fb5875b56bebc561}\label{game_8cpp_a7f9a5de14c9e9568fb5875b56bebc561} 
+\index{game.cpp@{game.cpp}!thrustSpeed@{thrustSpeed}}
+\index{thrustSpeed@{thrustSpeed}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{thrustSpeed}{thrustSpeed}}
+{\footnotesize\ttfamily \#define thrust\+Speed~6.f}
+
+\Hypertarget{game_8cpp_a294fe3de2156d6ed437dfb39276879e3}\label{game_8cpp_a294fe3de2156d6ed437dfb39276879e3} 
+\index{game.cpp@{game.cpp}!XpushSpeed@{XpushSpeed}}
+\index{XpushSpeed@{XpushSpeed}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{XpushSpeed}{XpushSpeed}}
+{\footnotesize\ttfamily \#define Xpush\+Speed~0.\+2f}
+
+\Hypertarget{game_8cpp_af3c41e5c56189a91a9830d9a066ec15b}\label{game_8cpp_af3c41e5c56189a91a9830d9a066ec15b} 
+\index{game.cpp@{game.cpp}!YpushSpeed@{YpushSpeed}}
+\index{YpushSpeed@{YpushSpeed}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{YpushSpeed}{YpushSpeed}}
+{\footnotesize\ttfamily \#define Ypush\+Speed~0.\+1f}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game_8cpp_ad24635f007ad60cecc1c1173285dcfaf}\label{game_8cpp_ad24635f007ad60cecc1c1173285dcfaf} 
+\index{game.cpp@{game.cpp}!areEqual@{areEqual}}
+\index{areEqual@{areEqual}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{areEqual()}{areEqual()}}
+{\footnotesize\ttfamily bool are\+Equal (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ bool $>$ \&}]{roads1,  }\item[{const std\+::vector$<$ bool $>$ \&}]{roads2 }\end{DoxyParamCaption})}
+
+\Hypertarget{game_8cpp_a12977e014e810b106b309ddafa445087}\label{game_8cpp_a12977e014e810b106b309ddafa445087} 
+\index{game.cpp@{game.cpp}!displayVector@{displayVector}}
+\index{displayVector@{displayVector}!game.cpp@{game.cpp}}
+\doxysubsubsection{\texorpdfstring{displayVector()}{displayVector()}}
+{\footnotesize\ttfamily void display\+Vector (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ bool $>$ \&}]{vec }\end{DoxyParamCaption})}
+

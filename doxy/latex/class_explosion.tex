@@ -1,0 +1,98 @@
+\doxysection{Explosion Class Reference}
+\hypertarget{class_explosion}{}\label{class_explosion}\index{Explosion@{Explosion}}
+
+
+This class represents an explosion.  
+
+
+
+
+{\ttfamily \#include $<$effects.\+hpp$>$}
+
+Inheritance diagram for Explosion\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_explosion}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_explosion_a3686b2a9c2072b43726734bdba034b81}{Explosion}} ()
+\item 
+bool \mbox{\hyperlink{class_explosion_a19f6595805de83b1a6ee894b88fbee09}{update}} ()
+\begin{DoxyCompactList}\small\item\em Switches the animation to the next frame. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_explosion_ac9c0baa7268ff5b8f4f358074a1326c0}{\texorpdfstring{$\sim$}{\string~}\+Explosion}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_explosion_a2847fbfadaafdaaeb7b44dc05b4c6ac5}{is\+\_\+displayed}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+u\+\_\+int8\+\_\+t \mbox{\hyperlink{class_explosion_ab074829325183f50a3d1fb8f440f850e}{frame}}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f}{textures}} \mbox{[}4\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class represents an explosion. 
+
+This clas inherits from sf\+::\+Sprite. The animation of an explosion is a frame by frame animation of 4 sucessive images. It has a contructor \doxylink{class_explosion_a3686b2a9c2072b43726734bdba034b81}{Explosion\+::\+Explosion()} that starts the explosion when called. The method \doxylink{class_explosion_a19f6595805de83b1a6ee894b88fbee09}{Explosion\+::update()} that switches to the next frame. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_explosion_a3686b2a9c2072b43726734bdba034b81}\label{class_explosion_a3686b2a9c2072b43726734bdba034b81} 
+\index{Explosion@{Explosion}!Explosion@{Explosion}}
+\index{Explosion@{Explosion}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{Explosion()}{Explosion()}}
+{\footnotesize\ttfamily Explosion\+::\+Explosion (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_explosion_ac9c0baa7268ff5b8f4f358074a1326c0}\label{class_explosion_ac9c0baa7268ff5b8f4f358074a1326c0} 
+\index{Explosion@{Explosion}!````~Explosion@{\texorpdfstring{$\sim$}{\string~}Explosion}}
+\index{````~Explosion@{\texorpdfstring{$\sim$}{\string~}Explosion}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Explosion()}{\string~Explosion()}}
+{\footnotesize\ttfamily Explosion\+::\texorpdfstring{$\sim$}{\string~}\+Explosion (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_explosion_a19f6595805de83b1a6ee894b88fbee09}\label{class_explosion_a19f6595805de83b1a6ee894b88fbee09} 
+\index{Explosion@{Explosion}!update@{update}}
+\index{update@{update}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily bool Explosion\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Switches the animation to the next frame. 
+
+It checks if there is a next frame or if the explosion should disapear. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_explosion_ab074829325183f50a3d1fb8f440f850e}\label{class_explosion_ab074829325183f50a3d1fb8f440f850e} 
+\index{Explosion@{Explosion}!frame@{frame}}
+\index{frame@{frame}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{frame}{frame}}
+{\footnotesize\ttfamily u\+\_\+int8\+\_\+t Explosion\+::frame\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_explosion_a2847fbfadaafdaaeb7b44dc05b4c6ac5}\label{class_explosion_a2847fbfadaafdaaeb7b44dc05b4c6ac5} 
+\index{Explosion@{Explosion}!is\_displayed@{is\_displayed}}
+\index{is\_displayed@{is\_displayed}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{is\_displayed}{is\_displayed}}
+{\footnotesize\ttfamily bool Explosion\+::is\+\_\+displayed}
+
+\Hypertarget{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f}\label{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f} 
+\index{Explosion@{Explosion}!textures@{textures}}
+\index{textures@{textures}!Explosion@{Explosion}}
+\doxysubsubsection{\texorpdfstring{textures}{textures}}
+{\footnotesize\ttfamily sf\+::\+Texture Explosion\+::textures\mbox{[}4\mbox{]}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/include/\mbox{\hyperlink{effects_8hpp}{effects.\+hpp}}\item 
+C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/src/\mbox{\hyperlink{effects_8cpp}{effects.\+cpp}}\end{DoxyCompactItemize}

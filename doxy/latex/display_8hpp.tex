@@ -1,0 +1,35 @@
+\doxysection{C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/include/display.hpp File Reference}
+\hypertarget{display_8hpp}{}\label{display_8hpp}\index{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/display.hpp@{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/display.hpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$SFML/\+Graphics.\+hpp$>$}\newline
+{\ttfamily \#include "{}game.\+hpp"{}}\newline
+{\ttfamily \#include "{}effects.\+hpp"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{display_8hpp_a86aa11bb8bc637494b83d4f276d2cd87}{play}} (bool)
+\begin{DoxyCompactList}\small\item\em This function is the main gaming loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{display_8hpp_a86aa11bb8bc637494b83d4f276d2cd87}\label{display_8hpp_a86aa11bb8bc637494b83d4f276d2cd87} 
+\index{display.hpp@{display.hpp}!play@{play}}
+\index{play@{play}!display.hpp@{display.hpp}}
+\doxysubsubsection{\texorpdfstring{play()}{play()}}
+{\footnotesize\ttfamily int play (\begin{DoxyParamCaption}\item[{bool}]{single\+Player }\end{DoxyParamCaption})}
+
+
+
+This function is the main gaming loop. 
+
+This function is called from the main. If the returned value is not-\/equal to 1, it is used to quit the main gaming loop.
+
+
+\begin{DoxyParams}{Parameters}
+{\em single\+Player} & Has to be False. This indicates 2 players mode. For more fun, the game is designed to be played by two people on the same keyboard as cars can interact. This parameter is let for developpers who may create another solo versions of the game. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the game continues. 
+\end{DoxyReturn}

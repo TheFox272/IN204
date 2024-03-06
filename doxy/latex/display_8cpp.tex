@@ -1,0 +1,45 @@
+\doxysection{C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/src/display.cpp File Reference}
+\hypertarget{display_8cpp}{}\label{display_8cpp}\index{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/src/display.cpp@{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/src/display.cpp}}
+{\ttfamily \#include "{}display.\+hpp"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{display_8cpp_a66595485e30f7796acad87c9d741a635}{game\+Name}}~"{}2D\+\_\+\+Race"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{display_8cpp_a06e4ff81e3097a87c20d29c3d162c2ca}{play}} (bool single\+Player)
+\begin{DoxyCompactList}\small\item\em This function is the main gaming loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{display_8cpp_a66595485e30f7796acad87c9d741a635}\label{display_8cpp_a66595485e30f7796acad87c9d741a635} 
+\index{display.cpp@{display.cpp}!gameName@{gameName}}
+\index{gameName@{gameName}!display.cpp@{display.cpp}}
+\doxysubsubsection{\texorpdfstring{gameName}{gameName}}
+{\footnotesize\ttfamily \#define game\+Name~"{}2D\+\_\+\+Race"{}}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{display_8cpp_a06e4ff81e3097a87c20d29c3d162c2ca}\label{display_8cpp_a06e4ff81e3097a87c20d29c3d162c2ca} 
+\index{display.cpp@{display.cpp}!play@{play}}
+\index{play@{play}!display.cpp@{display.cpp}}
+\doxysubsubsection{\texorpdfstring{play()}{play()}}
+{\footnotesize\ttfamily int play (\begin{DoxyParamCaption}\item[{bool}]{single\+Player }\end{DoxyParamCaption})}
+
+
+
+This function is the main gaming loop. 
+
+This function is called from the main. If the returned value is not-\/equal to 1, it is used to quit the main gaming loop.
+
+
+\begin{DoxyParams}{Parameters}
+{\em single\+Player} & Has to be False. This indicates 2 players mode. For more fun, the game is designed to be played by two people on the same keyboard as cars can interact. This parameter is let for developpers who may create another solo versions of the game. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the game continues. 
+\end{DoxyReturn}

@@ -1,0 +1,45 @@
+\doxysection{effects.\+hpp}
+\hypertarget{effects_8hpp_source}{}\label{effects_8hpp_source}\index{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/effects.hpp@{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/effects.hpp}}
+\mbox{\hyperlink{effects_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <SFML/Audio.hpp>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_explosion}{Explosion}}:\ \textcolor{keyword}{public}\ sf::Sprite}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ u\_int8\_t\ \mbox{\hyperlink{class_explosion_ab074829325183f50a3d1fb8f440f850e}{frame}};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f}{textures}}[4];}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_explosion_a2847fbfadaafdaaeb7b44dc05b4c6ac5}{is\_displayed}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_explosion_a3686b2a9c2072b43726734bdba034b81}{Explosion}}():\ \mbox{\hyperlink{class_explosion_ab074829325183f50a3d1fb8f440f850e}{frame}}(0),\ \mbox{\hyperlink{class_explosion_a2847fbfadaafdaaeb7b44dc05b4c6ac5}{is\_displayed}}(false)}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ 4;\ i++)}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f}{textures}}[i].loadFromFile(\textcolor{stringliteral}{"{}../animations/explosion/explosion\_frame"{}}\ +\ std::to\_string(i)\ +\ \textcolor{stringliteral}{"{}.png"{}});}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ setTexture(\mbox{\hyperlink{class_explosion_ac4759cea3d1d072ce3d7ee45bd87279f}{textures}}[0]);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ setOrigin(getTexture()-\/>getSize().x\ /\ 2,\ getTexture()-\/>getSize().y\ /\ 2);}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ setScale(0.2,\ 0.2);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_explosion_a19f6595805de83b1a6ee894b88fbee09}{update}}();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_explosion_ac9c0baa7268ff5b8f4f358074a1326c0}{\string~Explosion}}()}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{effects_8hpp_a390a7d83c9228b44c41a803a4e61d2f0}{startMusic}}(sf::Music\&);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{effects_8hpp_a57b3f216a4b52e591899c5aa08bc620c}{stopMusic}}(sf::Music\&);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{effects_8hpp_a74bcafd20781ae51acfd706d41ac196b}{initializeBump}}(sf::SoundBuffer\&,\ sf::Sound\&);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{effects_8hpp_a07e3ebf3e34a13606085949cff669539}{initializeExplosion}}(sf::SoundBuffer\&,\ sf::Sound\&);}
+
+\end{DoxyCode}

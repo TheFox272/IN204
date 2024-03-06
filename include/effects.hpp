@@ -5,7 +5,15 @@
 #include <SFML/Audio.hpp>
 
 /*----------------------------------------------------------------------------------------------------*/
-
+/**
+ * @brief This class represents an explosion.
+ * 
+ * This clas inherits from sf::Sprite.
+ * The animation of an explosion is a frame by frame animation of 4 sucessive images.
+ * It has a contructor Explosion::Explosion() that starts the explosion when called.
+ * The method Explosion::update() that switches to the next frame.
+ * 
+ */
 class Explosion: public sf::Sprite
 {
     private:
@@ -24,7 +32,11 @@ class Explosion: public sf::Sprite
             setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
             setScale(0.2, 0.2);
         }
-
+        /**
+         * @brief Switches the animation to the next frame.
+         * 
+         * It checks if there is a next frame or if the explosion should disapear.
+         */
         bool update();
 
         ~Explosion()
@@ -32,10 +44,45 @@ class Explosion: public sf::Sprite
 
 };
 
+/**
+ * @brief This function starts ambiant music.
+ * 
+ * This function works in pair with @ref stopMusic(sf::Music&) .
+ * It handles file loading failures.
+ * 
+ * @param music is a pointer to a sf::Music type.
+ * @return void
+ */
 void startMusic(sf::Music&);
 
+/**
+ * @brief This function stops ambiant music.
+ * 
+ * This function works in pair with @ref startMusic(sf::Music&) .
+ * 
+ * @param music The music you want to stop.
+ * @return void
+ */
 void stopMusic(sf::Music&);
 
+/**
+ * @brief Plays a bump sound effect.
+ * 
+ * It handles file loading failures.
+ * Its beahvior is similar to @ref initializeExplosion(sf::SoundBuffer&, sf::Sound&)
+ *
+ * @param buffer Pointer to the buffer where the sound will be loaded from file.
+ * @param sound Pointer on the sound environment wich is a sf::Sound.
+ */
 void initializeBump(sf::SoundBuffer&, sf::Sound&);
 
+/**
+ * @brief Plays an explosion sound effect.
+ * 
+ * It handles file loading failures.
+ * Its beahvior is similar to @ref initializeBump(sf::SoundBuffer&, sf::Sound&)
+ *
+ * @param buffer Pointer to the buffer where the sound will be loaded from file.
+ * @param sound Pointer on the sound environment wich is a sf::Sound.
+ */
 void initializeExplosion(sf::SoundBuffer&, sf::Sound&);

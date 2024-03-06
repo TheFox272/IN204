@@ -1,0 +1,102 @@
+\doxysection{C\+:/\+Edouard/\+ENSTA/\+IN204 -\/ Orienté Objet/\+IN204 -\/ Projet/\+IN204-\/ Git/include/effects.hpp File Reference}
+\hypertarget{effects_8hpp}{}\label{effects_8hpp}\index{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/effects.hpp@{C:/Edouard/ENSTA/IN204 -\/ Orienté Objet/IN204 -\/ Projet/IN204-\/ Git/include/effects.hpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$SFML/\+Graphics.\+hpp$>$}\newline
+{\ttfamily \#include $<$SFML/\+Audio.\+hpp$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_explosion}{Explosion}}
+\begin{DoxyCompactList}\small\item\em This class represents an explosion. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{effects_8hpp_a390a7d83c9228b44c41a803a4e61d2f0}{start\+Music}} (sf\+::\+Music \&)
+\begin{DoxyCompactList}\small\item\em This function starts ambiant music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{effects_8hpp_a57b3f216a4b52e591899c5aa08bc620c}{stop\+Music}} (sf\+::\+Music \&)
+\begin{DoxyCompactList}\small\item\em This function stops ambiant music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{effects_8hpp_a74bcafd20781ae51acfd706d41ac196b}{initialize\+Bump}} (sf\+::\+Sound\+Buffer \&, sf\+::\+Sound \&)
+\begin{DoxyCompactList}\small\item\em Plays a bump sound effect. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{effects_8hpp_a07e3ebf3e34a13606085949cff669539}{initialize\+Explosion}} (sf\+::\+Sound\+Buffer \&, sf\+::\+Sound \&)
+\begin{DoxyCompactList}\small\item\em Plays an explosion sound effect. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{effects_8hpp_a74bcafd20781ae51acfd706d41ac196b}\label{effects_8hpp_a74bcafd20781ae51acfd706d41ac196b} 
+\index{effects.hpp@{effects.hpp}!initializeBump@{initializeBump}}
+\index{initializeBump@{initializeBump}!effects.hpp@{effects.hpp}}
+\doxysubsubsection{\texorpdfstring{initializeBump()}{initializeBump()}}
+{\footnotesize\ttfamily void initialize\+Bump (\begin{DoxyParamCaption}\item[{sf\+::\+Sound\+Buffer \&}]{buffer,  }\item[{sf\+::\+Sound \&}]{sound }\end{DoxyParamCaption})}
+
+
+
+Plays a bump sound effect. 
+
+It handles file loading failures. Its beahvior is similar to \doxylink{effects_8hpp_a07e3ebf3e34a13606085949cff669539}{initialize\+Explosion(sf\+::\+Sound\+Buffer\&, sf\+::\+Sound\&)}
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Pointer to the buffer where the sound will be loaded from file. \\
+\hline
+{\em sound} & Pointer on the sound environment wich is a sf\+::\+Sound. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{effects_8hpp_a07e3ebf3e34a13606085949cff669539}\label{effects_8hpp_a07e3ebf3e34a13606085949cff669539} 
+\index{effects.hpp@{effects.hpp}!initializeExplosion@{initializeExplosion}}
+\index{initializeExplosion@{initializeExplosion}!effects.hpp@{effects.hpp}}
+\doxysubsubsection{\texorpdfstring{initializeExplosion()}{initializeExplosion()}}
+{\footnotesize\ttfamily void initialize\+Explosion (\begin{DoxyParamCaption}\item[{sf\+::\+Sound\+Buffer \&}]{buffer,  }\item[{sf\+::\+Sound \&}]{sound }\end{DoxyParamCaption})}
+
+
+
+Plays an explosion sound effect. 
+
+It handles file loading failures. Its beahvior is similar to \doxylink{effects_8hpp_a74bcafd20781ae51acfd706d41ac196b}{initialize\+Bump(sf\+::\+Sound\+Buffer\&, sf\+::\+Sound\&)}
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Pointer to the buffer where the sound will be loaded from file. \\
+\hline
+{\em sound} & Pointer on the sound environment wich is a sf\+::\+Sound. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{effects_8hpp_a390a7d83c9228b44c41a803a4e61d2f0}\label{effects_8hpp_a390a7d83c9228b44c41a803a4e61d2f0} 
+\index{effects.hpp@{effects.hpp}!startMusic@{startMusic}}
+\index{startMusic@{startMusic}!effects.hpp@{effects.hpp}}
+\doxysubsubsection{\texorpdfstring{startMusic()}{startMusic()}}
+{\footnotesize\ttfamily void start\+Music (\begin{DoxyParamCaption}\item[{sf\+::\+Music \&}]{music }\end{DoxyParamCaption})}
+
+
+
+This function starts ambiant music. 
+
+This function works in pair with \doxylink{effects_8hpp_a57b3f216a4b52e591899c5aa08bc620c}{stop\+Music(sf\+::\+Music\&)} . It handles file loading failures.
+
+
+\begin{DoxyParams}{Parameters}
+{\em music} & is a pointer to a sf\+::\+Music type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\Hypertarget{effects_8hpp_a57b3f216a4b52e591899c5aa08bc620c}\label{effects_8hpp_a57b3f216a4b52e591899c5aa08bc620c} 
+\index{effects.hpp@{effects.hpp}!stopMusic@{stopMusic}}
+\index{stopMusic@{stopMusic}!effects.hpp@{effects.hpp}}
+\doxysubsubsection{\texorpdfstring{stopMusic()}{stopMusic()}}
+{\footnotesize\ttfamily void stop\+Music (\begin{DoxyParamCaption}\item[{sf\+::\+Music \&}]{music }\end{DoxyParamCaption})}
+
+
+
+This function stops ambiant music. 
+
+This function works in pair with \doxylink{effects_8hpp_a390a7d83c9228b44c41a803a4e61d2f0}{start\+Music(sf\+::\+Music\&)} .
+
+
+\begin{DoxyParams}{Parameters}
+{\em music} & The music you want to stop. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
