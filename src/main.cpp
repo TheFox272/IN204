@@ -16,7 +16,10 @@ int main(int argc, char** argv){
 
     if (argc == 1)
     {
-        play(false);
+        while (play(false) == 1)
+        {
+
+        }
     }
     else
     {

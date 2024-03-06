@@ -64,6 +64,10 @@ int play(bool singlePlayer)
                     game.switchPause();
                     break;
 
+                case sf::Keyboard::Enter:
+                    statut = 1;
+                    goto Quit;
+
                 default:
                     break;
                 }
