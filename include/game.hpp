@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "entities.hpp"
 #include "effects.hpp"
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -17,47 +18,35 @@ class Player: public sf::Sprite
 {
     private:
         int life;
-        sf::Texture texture;
+        sf::Texture textures[5];
 
     public:
         sf::Vector2f inertia;
 
-        Player(bool is_p1): life(3), inertia(0, 0)
+        Player(bool is_p1): life(5), inertia(0, 0)
         {
-            if (is_p1)
-                texture.loadFromFile("../images/player1.png");
-            else
-                texture.loadFromFile("../images/player2.png");
-            setTexture(texture);
-
-            // Mettre l'origine du sprite au centre
+            std::string basePath = is_p1 ? "../images/Objects/Player_1/P1_" : "../images/Objects/Player_2/P2_";
+            for (size_t i = 0; i < 5; i++) {
+                textures[i].loadFromFile(basePath + std::to_string(i + 1) + ".png");
+            }
+            setTexture(textures[0]);
             setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
+            
+            // setRotation(270);
+            setScale(0.15, 0.15);
         }
 
-        void bump(const Player p2, Game *game);
+        void update(Game *game);
+
+        void bump(const sf::Sprite obstacle, Game *game, u_int8_t damage);
+
+        const int getLife();
 
         ~Player()
         {}
 
 };
 
-
-class Pothole: public sf::Sprite
-{
-    private:
-        sf::Texture texture;
-    public:
-
-        Pothole()
-        {
-            texture.loadFromFile("../images/pothole.png");
-            setTexture(texture);
-        }
-
-        ~Pothole()
-        {}
-
-};
 
 class Tile: public sf::Sprite
 {
@@ -122,9 +111,10 @@ class Game
         sf::RenderWindow * window;
         sf::Music music;
         sf::SoundBuffer bumpBuffer;
+        sf::SoundBuffer bimBuffer;
         sf::SoundBuffer explosionBuffer;
 
-        const bool playerDeath(Player &);
+        const bool playerFall(Player &);
 
     public:
         Player p1;
@@ -134,7 +124,9 @@ class Game
         Tile tile3;
         Info score;
         Explosion explosion;
+        std::vector<std::unique_ptr<Entity>> entities;
         sf::Sound bumpSound;
+        sf::Sound bimSound;
         sf::Sound explosionSound;
     
         Game(sf::RenderWindow * w):
@@ -152,15 +144,13 @@ class Game
             score(sf::Vector2f(10.f, 10.f))
         {   
             startMusic(music);
+
+            // Load sound effects
             initializeBump(bumpBuffer, bumpSound);
+            initializeBim(bimBuffer, bimSound);
             initializeExplosion(explosionBuffer, explosionSound);
 
-            p1.setRotation(270);
-            p1.setScale(0.2, 0.2);
             p1.setPosition(sf::Vector2f(window->getSize().x * 0.4, window->getSize().y * 0.7));
-            
-            p2.setRotation(270);
-            p2.setScale(0.2, 0.2);
             p2.setPosition(sf::Vector2f(window->getSize().x * 0.6, window->getSize().y * 0.7));
 
             double tileScale = window->getSize().x / tile1.width();
@@ -177,8 +167,6 @@ class Game
             tile3.setPosition(sf::Vector2f(0, window->getSize().y - 3 * tileMax));
         }
 
-        const double getSpeed();
-
         int update();
 
         int updatePause();
@@ -186,6 +174,8 @@ class Game
         int tileChange();
 
         int checkCollision();
+
+        const double getSpeed();
 
         Player *checkDeath();
 
@@ -202,6 +192,8 @@ class Game
         int gameOver(Player *);
 
         void addExplosion(const sf::Vector2f &);
+
+        void spawnObstacle(Tile *);
 
         ~Game()
         {}

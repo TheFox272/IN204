@@ -5,32 +5,33 @@
 #include <SFML/Audio.hpp>
 
 /*----------------------------------------------------------------------------------------------------*/
+
 /**
  * @brief This class represents an explosion.
  * 
- * This clas inherits from sf::Sprite.
+ * This class inherits from sf::Sprite.
  * The animation of an explosion is a frame by frame animation of 4 sucessive images.
  * It has a contructor Explosion::Explosion() that starts the explosion when called.
- * The method Explosion::update() that switches to the next frame.
+ * The method Explosion::update() switches to the next frame.
  * 
  */
 class Explosion: public sf::Sprite
 {
     private:
         u_int8_t frame;
-        sf::Texture textures[4];
+        sf::Texture textures[64];
     public:
         bool is_displayed;
 
         Explosion(): frame(0), is_displayed(false)
         {
-            for (size_t i = 0; i < 4; i++)
+            for (size_t i = 0; i < 64; i++)
             {
-                textures[i].loadFromFile("../animations/explosion/explosion_frame" + std::to_string(i) + ".png");
+                textures[i].loadFromFile("../images/FX/Explosion/explosion_" + std::to_string(i) + ".png");
             }
             setTexture(textures[0]);
             setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
-            setScale(0.2, 0.2);
+            setScale(3, 3);
         }
         /**
          * @brief Switches the animation to the next frame.
@@ -75,6 +76,17 @@ void stopMusic(sf::Music&);
  * @param sound Pointer on the sound environment wich is a sf::Sound.
  */
 void initializeBump(sf::SoundBuffer&, sf::Sound&);
+
+/**
+ * @brief Plays a bim sound effect.
+ * 
+ * It handles file loading failures.
+ * Its beahvior is similar to @ref initializeBump(sf::SoundBuffer&, sf::Sound&)
+ *
+ * @param buffer Pointer to the buffer where the sound will be loaded from file.
+ * @param sound Pointer on the sound environment wich is a sf::Sound.
+ */
+void initializeBim(sf::SoundBuffer&, sf::Sound&);
 
 /**
  * @brief Plays an explosion sound effect.

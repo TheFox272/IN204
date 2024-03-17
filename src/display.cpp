@@ -90,6 +90,10 @@ int play(bool singlePlayer)
         {
             window.draw(game.explosion);
         }
+        for (const auto& entity : game.entities)
+        {
+            window.draw(*entity);
+        }
 
         window.display();
     }
