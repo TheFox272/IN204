@@ -93,6 +93,8 @@ int play(bool singlePlayer)
         window.draw(game.tile3);
         window.draw(game.p1);
         window.draw(game.p2);
+        window.draw(game.hpBar1);
+        window.draw(game.hpBar2);
         window.draw(game.score);
         if (game.explosion.is_displayed)
         {

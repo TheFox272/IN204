@@ -12,7 +12,7 @@
 #define inertiaLoss 0.8f
 #define moveThreshold 0.1f
 
-#define roadWidth 201.f
+#define roadWidth 185.f
 #define nRoads 5.f
 
 #define changeChance 0.3f
@@ -21,6 +21,94 @@
 #define spawnMargin 0.4f
 
 /*----------------------------------------------------------------------------------------------------*/
+
+Tile::Tile():
+    roads { false, true, true, true, false }
+{
+    texture.loadFromFile("../images/map/road_3.png");
+    setTexture(texture);
+}
+
+double Tile::height(){
+    return texture.getSize().y * getScale().y;
+}
+
+double Tile::width(){
+    return texture.getSize().x * getScale().x;
+}
+
+/*----------------------------------------------------------------------------------------------------*/
+
+Info::Info(const sf::Vector2f &position)
+{
+    if (!font.loadFromFile("../fonts/STIXGeneral.ttf"))
+        std::cerr << "Erreur lors du chargement de la police" << std::endl;
+    setFont(font);
+    setCharacterSize(30);
+    setFillColor(sf::Color::White);
+    setStyle(Bold);
+    setPosition(position);
+}
+
+/*----------------------------------------------------------------------------------------------------*/
+
+HpBar::HpBar(const sf::Vector2f &position, bool isPlayer1):
+    isPlayer1(isPlayer1)
+{
+    for (size_t i = 0; i < 6; i++)
+    {
+        textures[i].loadFromFile("../images/FX/HP/P" + std::to_string(isPlayer1 ? 1 : 2) + "_" + std::to_string(i) + ".png");
+    }
+    setTexture(textures[4]);
+    setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
+    setScale(0.6, 0.6);
+    setPosition(position);
+}
+
+/*----------------------------------------------------------------------------------------------------*/
+
+Game::Game(sf::RenderWindow * w, bool solo):
+    gen(rd()),
+    dis(0.0, 1.0),
+    solo(solo),
+    difficulty(1),
+    speed(5),
+    progression(0),
+    paused(false),
+    tileProgress(0),
+    transitionRoads {false, false, false, false, false},
+    window(w),
+    p1(solo ? window->getSize().x * 0.5 : window->getSize().x * 0.4, window->getSize().y * 0.7, true),
+    p2(solo ? window->getSize().x * 0.8 : window->getSize().x * 0.6, window->getSize().y * 0.3, false),
+    hpBar1(sf::Vector2f(200, 150), true),
+    hpBar2(sf::Vector2f(200, 270), false),
+    score(sf::Vector2f(10.f, 10.f))
+{   
+    startMusic(music);
+
+    // Load sound effects
+    initializeBump(bumpBuffer, bumpSound);
+    initializeBim(bimBuffer, bimSound);
+    initializeExplosion(explosionBuffer, explosionSound);
+
+    if (solo){
+        p2.setRotation(50);
+        p2.loseLife(4);
+    }
+
+    double tileScale = window->getSize().x / tile1.width();
+
+    tile1.setScale(tileScale, tileScale);
+    tile2.setScale(tileScale, tileScale);
+    tile3.setScale(tileScale, tileScale);
+
+    tileMax = tile1.height();
+    currentTile = &tile1;
+
+    tile1.setPosition(sf::Vector2f(0, window->getSize().y - tileMax));
+    tile2.setPosition(sf::Vector2f(0, window->getSize().y - 2 * tileMax));
+    tile3.setPosition(sf::Vector2f(0, window->getSize().y - 3 * tileMax));
+}
 
 int Game::updatePause(){
     if (explosion.is_displayed){
@@ -84,6 +172,14 @@ int Game::update(){
     Player *deadPlayer = checkDeath();
     if (deadPlayer != NULL)
         gameOver(deadPlayer);
+
+    hpBar1.move(sf::Vector2f(0, -speed));
+    hpBar1.setTexture(hpBar1.textures[p1.getLife()]);
+    hpBar2.move(sf::Vector2f(0, -speed));
+    if (!solo)
+        hpBar2.setTexture(hpBar2.textures[p2.getLife()]);
+    else
+        hpBar2.setTexture(hpBar2.textures[0]);
 
     score.move(sf::Vector2f(0, -speed));
     score.setString("Speed: " + std::to_string(speed).substr(0, 5) + " mph");
@@ -304,45 +400,3 @@ const double Game::getSpeed(){
 const bool Game::getPaused(){
     return paused;
 }
-
-double Tile::height(){
-    return texture.getSize().y * getScale().y;
-}
-
-double Tile::width(){
-    return texture.getSize().x * getScale().x;
-}
-
-
-// void Player::update(Game *game){
-//     // update position
-//     move(sf::Vector2f(0, -game->getSpeed()));
-//     if (inertia.x > moveThreshold || inertia.x < -moveThreshold){
-//         move(sf::Vector2f(inertia.x, 0));
-//         inertia.x = inertia.x * inertiaLoss;
-//     }
-//     if (inertia.y > moveThreshold || inertia.y < -moveThreshold){
-//         move(sf::Vector2f(0, inertia.y));
-//         inertia.y = inertia.y * inertiaLoss;
-//     }
-
-//     // update texture
-//     setTexture(textures[5-life]);
-// }
-
-
-// void Player::bump(const sf::Sprite obstacle, Game *game, u_int8_t damage){
-//     if (damage > 0){
-//         game->bimSound.play();
-//     } else {
-//         game->bumpSound.play();
-//     }
-//     game->bumpSound.play();
-//     inertia.x += (getPosition().x - obstacle.getPosition().x) * XpushSpeed / (getGlobalBounds().width + obstacle.getGlobalBounds().width);
-//     inertia.y += (getPosition().y - obstacle.getPosition().y) * YpushSpeed / (getGlobalBounds().height + obstacle.getGlobalBounds().height);
-//     life -= damage;
-// }
-
-// const int Player::getLife(){
-//     return life;
-// }
