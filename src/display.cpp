@@ -2,12 +2,14 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
+// The name the window will have
 #define gameName "2D_Race"
 
 /*----------------------------------------------------------------------------------------------------*/
 
 int play(bool singlePlayer)
 {
+    // the statut that will be returned. 0 corresponds to a normal exit
     int statut = 0;
 
     /* #region Window initialization */
@@ -18,7 +20,7 @@ int play(bool singlePlayer)
     /* #endregion */
 
     /* #region  Game initialization*/
-    Game game(&window);
+    Game game(&window, singlePlayer);
     /* #endregion */
 
     while (window.isOpen())
@@ -44,10 +46,12 @@ int play(bool singlePlayer)
                 window.close();
                 break;
 
+            // on another window
             case sf::Event::LostFocus:
                 game.pause();
                 break;
 
+            // back on the game's window
             case sf::Event::GainedFocus:
                 game.resume();
                 break;
@@ -55,15 +59,18 @@ int play(bool singlePlayer)
             case sf::Event::KeyPressed:
                 switch (event.key.code)
                 {
+                // press escape to force exit the game
                 case sf::Keyboard::Escape:
                     statut = -1;
                     std::cout << "manual interruption of game\n";
                     goto Quit;
 
+                // press P to Pause
                 case sf::Keyboard::P:
                     game.switchPause();
                     break;
 
+                // press Enter to restart
                 case sf::Keyboard::Enter:
                     statut = 1;
                     goto Quit;
@@ -78,8 +85,9 @@ int play(bool singlePlayer)
                 break;
             }
         }
+        
+        // drawing everything
         window.clear(sf::Color::White);
-
         window.draw(game.tile1);
         window.draw(game.tile2);
         window.draw(game.tile3);
