@@ -21,4 +21,4 @@
  * @return The status code indicating the result of the game. 0 corresponds to a normal exit. 1 corresponds to an asked restart.
  * 
  */
-int play(bool);
+int play(bool, uint8_t);

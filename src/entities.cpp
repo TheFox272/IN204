@@ -83,6 +83,18 @@ SoundType Entity::bump(const sf::Sprite obstacle, u_int8_t damage)
     return SoundType::BIM;
 }
 
+SoundType Entity::bumpBarrier(const sf::Vector2f barrier)
+{
+    inertia.x += (getPosition().x - barrier.x) * (bumpSpeed/weight) / getGlobalBounds().width;
+    inertia.y += (getPosition().y - barrier.y) * (bumpSpeed/weight) / getGlobalBounds().height;
+    loseLife(1);
+    if (life == 0)
+    {
+        return SoundType::EXPLOSION;
+    }
+    return SoundType::BIM;
+}
+
 void Entity::update()
 {   
     // basic movement

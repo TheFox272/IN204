@@ -2,23 +2,12 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
-#define acceleration 0.001f
-
-#define sideSpeed 1.f
-#define thrustSpeed 6.f
-#define slowSpeed 5.f
-#define XpushSpeed 30.f
-#define YpushSpeed 35.f
-#define inertiaLoss 0.8f
-#define moveThreshold 0.1f
-
 #define roadWidth 185.f
 #define nRoads 5.f
 
-#define changeChance 0.3f
-#define spawnChance 0.5f
-
 #define spawnMargin 0.4f
+
+#define barrierPush 50.f
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -67,12 +56,11 @@ HpBar::HpBar(const sf::Vector2f &position, bool isPlayer1):
 
 /*----------------------------------------------------------------------------------------------------*/
 
-Game::Game(sf::RenderWindow * w, bool solo):
+Game::Game(sf::RenderWindow * w, bool solo, uint8_t difficulty):
     gen(rd()),
     dis(0.0, 1.0),
     solo(solo),
-    difficulty(1),
-    speed(5),
+    difficulty(difficulty),
     progression(0),
     paused(false),
     tileProgress(0),
@@ -84,6 +72,26 @@ Game::Game(sf::RenderWindow * w, bool solo):
     hpBar2(sf::Vector2f(200, 270), false),
     score(sf::Vector2f(10.f, 10.f))
 {   
+    // Difficulty setup
+    if (difficulty == 1){
+        speed = 5;
+        acceleration = 0.001f;
+        spawnChance = 0.3f;
+        changeChance = 0.3f;
+    }
+    else if (difficulty == 2){
+        speed = 7;
+        acceleration = 0.005f;
+        spawnChance = 0.5f;
+        changeChance = 0.5f;
+    }
+    else{
+        speed = 10;
+        acceleration = 0.01f;
+        spawnChance = 0.7f;
+        changeChance = 0.7f;
+    }
+
     startMusic(music);
 
     // Load sound effects
@@ -155,20 +163,17 @@ int Game::update(){
         }
     }
 
+    sound = maxSound(sound, playerFall(p1));
+    if (!solo)
+        sound = maxSound(sound, playerFall(p2));
+
     if (sound == SoundType::BUMP)
         bumpSound.play();
     else if (sound == SoundType::BIM)
         bimSound.play();
     else if (sound == SoundType::EXPLOSION)
-        explosionSound.play();
-
-    // tiles update
-    tileProgress += speed;
-    if (tileProgress >= tileMax){
-        tileProgress -= tileMax;
-        tileChange();
-    }
-
+        explosionSound.play();    
+    
     Player *deadPlayer = checkDeath();
     if (deadPlayer != NULL)
         gameOver(deadPlayer);
@@ -227,6 +232,24 @@ bool areEqual(const std::vector<bool>& roads1, const std::vector<bool>& roads2) 
         }
     }
     return true;
+}
+
+
+bool Game::updateTile(){
+    tileProgress += speed;
+    if (tileProgress >= tileMax){
+        tileProgress -= tileMax;
+        return true;
+    }
+    return false;
+}
+
+bool Game::newTileVisible(){
+    return currentTile->getPosition().y + tileMax > 0;
+}
+
+void Game::catchProgression(int cycle){
+    progression += cycle * (speed - cycle * progression) + cycle*(cycle+1)*acceleration/2;
 }
 
 int Game::tileChange(){
@@ -315,14 +338,14 @@ Tile *Game::getNextTile(Tile *tile){
 }
 
 Player *Game::checkDeath(){
-    if (p1.getLife() <= 0 || playerFall(p1))
+    if (p1.getLife() <= 0)
         return &p1;
-    else if (!solo && (p2.getLife() <= 0 || playerFall(p2)))
+    else if (!solo && (p2.getLife() <= 0))
         return &p2;
     return NULL;
 }
 
-const bool Game::playerFall(Player &p){
+SoundType Game::playerFall(Player &p){
     Tile *tile;
     if (p.getPosition().y >= currentTile->getPosition().y)
         tile = currentTile;
@@ -344,10 +367,13 @@ const bool Game::playerFall(Player &p){
         }
         i++;
     }
-    if (p.getPosition().x < xMin || p.getPosition().x > xMax){
-        return true;
+    if (p.getPosition().x < xMin){
+        return p.bumpBarrier(sf::Vector2f(xMin-barrierPush, p.getPosition().y));
     }
-    return false;
+    else if (p.getPosition().x > xMax){
+        return p.bumpBarrier(sf::Vector2f(xMax+barrierPush, p.getPosition().y));
+    }
+    return SoundType::NONE;
 }
 
 int Game::gameOver(Player *deadPlayer){

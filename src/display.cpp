@@ -7,7 +7,7 @@
 
 /*----------------------------------------------------------------------------------------------------*/
 
-int play(bool singlePlayer)
+int play(bool singlePlayer, uint8_t difficulty)
 {
     // the statut that will be returned. 0 corresponds to a normal exit
     int statut = 0;
@@ -20,7 +20,7 @@ int play(bool singlePlayer)
     /* #endregion */
 
     /* #region  Game initialization*/
-    Game game(&window, singlePlayer);
+    Game game(&window, singlePlayer, difficulty);
     /* #endregion */
 
     while (window.isOpen())
@@ -28,6 +28,10 @@ int play(bool singlePlayer)
         if (!game.getPaused())
         {
             game.update();
+            if (game.updateTile())
+            {
+                game.tileChange();
+            }
             mainView.move(0, -game.getSpeed());
             window.setView(mainView);
         }

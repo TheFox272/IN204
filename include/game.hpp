@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <random>
 #include <string>
+#include <thread>
 
 #include <SFML/Graphics.hpp>
 
@@ -70,7 +71,10 @@ class Game
         // Whether the game is solo or not
         bool solo;
         // Difficulty : 1 = easy, 2 = average, 3 = hard
-        u_int8_t difficulty;
+        uint8_t difficulty;
+        double acceleration;
+        double spawnChance;
+        double changeChance;
         // Speed of the game
         double speed;
         // Progression of the game
@@ -91,7 +95,7 @@ class Game
         sf::SoundBuffer bimBuffer;
         sf::SoundBuffer explosionBuffer;
         // Check weither a player is out of the road or not
-        const bool playerFall(Player &);
+        SoundType playerFall(Player &);
     public:
         Player p1;
         Player p2;
@@ -107,7 +111,7 @@ class Game
         sf::Sound bimSound;
         sf::Sound explosionSound;
     
-        Game(sf::RenderWindow * w, bool solo);
+        Game(sf::RenderWindow * w, bool solo, uint8_t difficulty);
 
         // Main game loop
         int update();
@@ -120,6 +124,9 @@ class Game
         const bool getPaused();
 
         // Tile management
+        bool updateTile();
+        bool newTileVisible();
+        void catchProgression(int);
         int tileChange();
         Tile *getNextTile(Tile *);
         

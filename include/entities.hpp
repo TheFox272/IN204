@@ -66,6 +66,8 @@ class Entity: public sf::Sprite
 
         // bump into an obstacle
         SoundType bump(const sf::Sprite obstacle, u_int8_t damage);
+        // bump into a barrier
+        SoundType bumpBarrier(const sf::Vector2f barrier);
 
         // update the entity (move, etc.)
         void update();
