@@ -4,7 +4,7 @@
 
 #define acceleration 0.001f
 
-#define sideSpeed 5.f
+#define sideSpeed 1.f
 #define thrustSpeed 6.f
 #define slowSpeed 5.f
 #define XpushSpeed 30.f
@@ -34,70 +34,47 @@ int Game::updatePause(){
 
 int Game::update(){
 
+    speed += acceleration;
     progression += speed;
     
-    p1.update(this);
-    p2.update(this);
+    SoundType sound = SoundType::NONE;
 
-    if (p1.getGlobalBounds().intersects(p2.getGlobalBounds())){
-        p1.bump(p2, this, 0);
-        p2.bump(p1, this, 0);
+    // players update
+    p1.update();
+    p1.specialUpdate(window->getSize(), progression, speed);
+    if (!solo){
+        p2.update();
+        p2.specialUpdate(window->getSize(), progression, speed);
+        if (p1.getGlobalBounds().intersects(p2.getGlobalBounds())){
+            sound = maxSound(sound, p1.bump(p2, p2.getDamage()));
+            sound = maxSound(sound, p2.bump(p1, p1.getDamage()));
+        }
     }
 
-    if (p1.inertia.x > moveThreshold || p1.inertia.x < -moveThreshold){
-        p1.move(sf::Vector2f(p1.inertia.x, 0));
-        p1.inertia.x = p1.inertia.x * inertiaLoss;
-    }
-    if (p1.inertia.y > moveThreshold || p1.inertia.y < -moveThreshold){
-        p1.move(sf::Vector2f(0, p1.inertia.y));
-        p1.inertia.y = p1.inertia.y * inertiaLoss;
-    }
-    if (p2.inertia.x > moveThreshold || p2.inertia.x < -moveThreshold){
-        p2.move(sf::Vector2f(p2.inertia.x, 0));
-        p2.inertia.x = p2.inertia.x * inertiaLoss;
-    }
-    if (p2.inertia.y > moveThreshold || p2.inertia.y < -moveThreshold){
-        p2.move(sf::Vector2f(0, p2.inertia.y));
-        p2.inertia.y = p2.inertia.y * inertiaLoss;
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        p1.move(sf::Vector2f(-sideSpeed, 0));
-    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        p1.move(sf::Vector2f(sideSpeed, 0));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        p1.move(sf::Vector2f(0, -thrustSpeed));
-    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        p1.move(sf::Vector2f(0, slowSpeed));
-    
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        p2.move(sf::Vector2f(-sideSpeed, 0));
-    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        p2.move(sf::Vector2f(sideSpeed, 0));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        p2.move(sf::Vector2f(0, -thrustSpeed));
-    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        p2.move(sf::Vector2f(0, slowSpeed));
-
-    if (p1.getPosition().y > window->getSize().y - progression - p1.getGlobalBounds().height / 2)
-        p1.setPosition(p1.getPosition().x, window->getSize().y - progression - p1.getGlobalBounds().height / 2);
-    else if (p1.getPosition().y < -progression + p1.getGlobalBounds().height / 2)
-        p1.setPosition(p1.getPosition().x, -progression + p1.getGlobalBounds().height / 2);
-    if (p2.getPosition().y > window->getSize().y - progression - p2.getGlobalBounds().height / 2)
-        p2.setPosition(p2.getPosition().x, window->getSize().y - progression - p2.getGlobalBounds().height / 2);
-    else if (p2.getPosition().y < -progression + p2.getGlobalBounds().height / 2)
-        p2.setPosition(p2.getPosition().x, -progression + p2.getGlobalBounds().height / 2);
-
+    // entities update
     for (auto &entity : entities){
         entity->update();
+        entity->specialUpdate(window->getSize(), progression, speed);
         if (entity->getGlobalBounds().intersects(p1.getGlobalBounds())){
-            p1.bump(*entity, this, entity->getDamage());
+            sound = maxSound(sound, p1.bump(*entity, entity->getDamage()));
+            sound = maxSound(sound, entity->bump(p1, p1.getDamage()));
         }
-        if (entity->getGlobalBounds().intersects(p2.getGlobalBounds())){
-            p2.bump(*entity, this, entity->getDamage());
+        if (!solo){
+            if (entity->getGlobalBounds().intersects(p2.getGlobalBounds())){
+                sound = maxSound(sound, p2.bump(*entity, entity->getDamage()));
+                sound = maxSound(sound, entity->bump(p2, p2.getDamage()));
+            }
         }
     }
 
+    if (sound == SoundType::BUMP)
+        bumpSound.play();
+    else if (sound == SoundType::BIM)
+        bimSound.play();
+    else if (sound == SoundType::EXPLOSION)
+        explosionSound.play();
+
+    // tiles update
     tileProgress += speed;
     if (tileProgress >= tileMax){
         tileProgress -= tileMax;
@@ -108,31 +85,10 @@ int Game::update(){
     if (deadPlayer != NULL)
         gameOver(deadPlayer);
 
-    speed += acceleration;
-    
     score.move(sf::Vector2f(0, -speed));
     score.setString("Speed: " + std::to_string(speed).substr(0, 5) + " mph");
 
     return 0;
-}
-
-bool areEqual(const std::vector<bool>& roads1, const std::vector<bool>& roads2) {
-    if (roads1.size() != roads2.size()) {
-        return false;
-    }
-    for (size_t i = 0; i < roads1.size(); ++i) {
-        if (roads1[i] != roads2[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void displayVector(const std::vector<bool>& vec) {
-    for (bool value : vec) {
-        std::cout << std::boolalpha << value << " "; // std::boolalpha affiche true/false au lieu de 1/0
-    }
-    std::cout << std::endl;
 }
 
 
@@ -164,6 +120,18 @@ void Game::spawnObstacle(Tile *tile){
     }
 }
 
+
+bool areEqual(const std::vector<bool>& roads1, const std::vector<bool>& roads2) {
+    if (roads1.size() != roads2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < roads1.size(); ++i) {
+        if (roads1[i] != roads2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 int Game::tileChange(){
 
@@ -253,7 +221,7 @@ Tile *Game::getNextTile(Tile *tile){
 Player *Game::checkDeath(){
     if (p1.getLife() <= 0 || playerFall(p1))
         return &p1;
-    else if (p2.getLife() <= 0 || playerFall(p2))
+    else if (!solo && (p2.getLife() <= 0 || playerFall(p2)))
         return &p2;
     return NULL;
 }
@@ -346,24 +314,35 @@ double Tile::width(){
 }
 
 
-void Player::update(Game *game){
-    move(sf::Vector2f(0, -game->getSpeed()));
-    setTexture(textures[5-life]);
-}
+// void Player::update(Game *game){
+//     // update position
+//     move(sf::Vector2f(0, -game->getSpeed()));
+//     if (inertia.x > moveThreshold || inertia.x < -moveThreshold){
+//         move(sf::Vector2f(inertia.x, 0));
+//         inertia.x = inertia.x * inertiaLoss;
+//     }
+//     if (inertia.y > moveThreshold || inertia.y < -moveThreshold){
+//         move(sf::Vector2f(0, inertia.y));
+//         inertia.y = inertia.y * inertiaLoss;
+//     }
+
+//     // update texture
+//     setTexture(textures[5-life]);
+// }
 
 
-void Player::bump(const sf::Sprite obstacle, Game *game, u_int8_t damage){
-    if (damage > 0){
-        game->bimSound.play();
-    } else {
-        game->bumpSound.play();
-    }
-    game->bumpSound.play();
-    inertia.x += (getPosition().x - obstacle.getPosition().x) * XpushSpeed / (getGlobalBounds().width + obstacle.getGlobalBounds().width);
-    inertia.y += (getPosition().y - obstacle.getPosition().y) * YpushSpeed / (getGlobalBounds().height + obstacle.getGlobalBounds().height);
-    life -= damage;
-}
+// void Player::bump(const sf::Sprite obstacle, Game *game, u_int8_t damage){
+//     if (damage > 0){
+//         game->bimSound.play();
+//     } else {
+//         game->bumpSound.play();
+//     }
+//     game->bumpSound.play();
+//     inertia.x += (getPosition().x - obstacle.getPosition().x) * XpushSpeed / (getGlobalBounds().width + obstacle.getGlobalBounds().width);
+//     inertia.y += (getPosition().y - obstacle.getPosition().y) * YpushSpeed / (getGlobalBounds().height + obstacle.getGlobalBounds().height);
+//     life -= damage;
+// }
 
-const int Player::getLife(){
-    return life;
-}
+// const int Player::getLife(){
+//     return life;
+// }

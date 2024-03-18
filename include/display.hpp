@@ -18,14 +18,7 @@
  * @param singlePlayer Has to be False. This indicates 2 players mode.
  * For more fun, the game is designed to be played by two people on the same keyboard as cars can interact.
  * This parameter is let for developpers who may create another solo versions of the game.
- * @return 1 if the game continues.
+ * @return The status code indicating the result of the game. 0 corresponds to a normal exit. 1 corresponds to an asked restart.
  * 
  */
 int play(bool);
-
-
-
-
-
-
-

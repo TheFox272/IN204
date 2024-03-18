@@ -14,40 +14,6 @@
 
 class Game;
 
-class Player: public sf::Sprite
-{
-    private:
-        int life;
-        sf::Texture textures[5];
-
-    public:
-        sf::Vector2f inertia;
-
-        Player(bool is_p1): life(5), inertia(0, 0)
-        {
-            std::string basePath = is_p1 ? "../images/Objects/Player_1/P1_" : "../images/Objects/Player_2/P2_";
-            for (size_t i = 0; i < 5; i++) {
-                textures[i].loadFromFile(basePath + std::to_string(i + 1) + ".png");
-            }
-            setTexture(textures[0]);
-            setOrigin(getTexture()->getSize().x / 2, getTexture()->getSize().y / 2);
-            
-            // setRotation(270);
-            setScale(0.15, 0.15);
-        }
-
-        void update(Game *game);
-
-        void bump(const sf::Sprite obstacle, Game *game, u_int8_t damage);
-
-        const int getLife();
-
-        ~Player()
-        {}
-
-};
-
-
 class Tile: public sf::Sprite
 {
     public:
@@ -99,6 +65,7 @@ class Game
         std::mt19937 gen;
         std::uniform_real_distribution<double> dis;
 
+        bool solo;
         u_int8_t difficulty;  // Difficulty : 1 = easy, 2 = average, 3 = hard
         double speed;
         double progression;
@@ -129,9 +96,10 @@ class Game
         sf::Sound bimSound;
         sf::Sound explosionSound;
     
-        Game(sf::RenderWindow * w):
+        Game(sf::RenderWindow * w, bool solo):
             gen(rd()),
             dis(0.0, 1.0),
+            solo(solo),
             difficulty(1),
             speed(5),
             progression(0),
@@ -139,8 +107,8 @@ class Game
             tileProgress(0),
             transitionRoads {false, false, false, false, false},
             window(w),
-            p1(true),
-            p2(false),
+            p1(solo ? window->getSize().x * 0.5 : window->getSize().x * 0.4, window->getSize().y * 0.7, true),
+            p2(solo ? window->getSize().x * 0.5 : window->getSize().x * 0.6, window->getSize().y * 0.7, false),
             score(sf::Vector2f(10.f, 10.f))
         {   
             startMusic(music);
@@ -150,8 +118,8 @@ class Game
             initializeBim(bimBuffer, bimSound);
             initializeExplosion(explosionBuffer, explosionSound);
 
-            p1.setPosition(sf::Vector2f(window->getSize().x * 0.4, window->getSize().y * 0.7));
-            p2.setPosition(sf::Vector2f(window->getSize().x * 0.6, window->getSize().y * 0.7));
+            if (solo)
+                delete &p2;
 
             double tileScale = window->getSize().x / tile1.width();
 
