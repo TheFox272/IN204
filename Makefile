@@ -9,7 +9,7 @@ EXEC = main
 
 all: $(BUILD)$(EXEC)
 
-$(BUILD)$(EXEC): $(BUILD)main.o $(BUILD)game.o $(BUILD)display.o $(BUILD)effects.o
+$(BUILD)$(EXEC): $(BUILD)main.o $(BUILD)game.o $(BUILD)display.o $(BUILD)entities.o $(BUILD)effects.o
 	$(CC) $(CFLAGS) -g $^ -o $@ $(LIBS)
 
 $(BUILD)%.o: $(SRC)%.cpp $(INC)%.hpp

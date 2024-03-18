@@ -5,7 +5,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 
 bool Explosion::update(){
-    if (frame < 3)
+    if (frame < 63)
     {
         frame++;
         setTexture(textures[frame]);
@@ -31,6 +31,16 @@ void stopMusic(sf::Music& music) {
 
 void initializeBump(sf::SoundBuffer& buffer, sf::Sound& sound){
     const std::string filePath = "../sound/bump.wav";
+    if (!buffer.loadFromFile(filePath)) {
+        std::cerr << "Erreur lors du chargement du fichier audio." << std::endl;
+        return;
+    }
+
+    sound.setBuffer(buffer);
+}
+
+void initializeBim(sf::SoundBuffer& buffer, sf::Sound& sound){
+    const std::string filePath = "../sound/Explosion 1.wav";
     if (!buffer.loadFromFile(filePath)) {
         std::cerr << "Erreur lors du chargement du fichier audio." << std::endl;
         return;

@@ -7,21 +7,24 @@
 #define sideSpeed 5.f
 #define thrustSpeed 6.f
 #define slowSpeed 5.f
-#define XpushSpeed 0.2f
-#define YpushSpeed 0.1f
+#define XpushSpeed 30.f
+#define YpushSpeed 35.f
 #define inertiaLoss 0.8f
 #define moveThreshold 0.1f
 
 #define roadWidth 201.f
 #define nRoads 5.f
 
-#define changeChance 0.2f
+#define changeChance 0.3f
+#define spawnChance 0.5f
+
+#define spawnMargin 0.4f
 
 /*----------------------------------------------------------------------------------------------------*/
 
 int Game::updatePause(){
     if (explosion.is_displayed){
-        sf::sleep(sf::milliseconds(100));
+        sf::sleep(sf::milliseconds(10));
         if (!explosion.update()){
             explosion.is_displayed = false;
         }
@@ -32,12 +35,13 @@ int Game::updatePause(){
 int Game::update(){
 
     progression += speed;
-    p1.move(sf::Vector2f(0, -speed));
-    p2.move(sf::Vector2f(0, -speed));
     
+    p1.update(this);
+    p2.update(this);
+
     if (p1.getGlobalBounds().intersects(p2.getGlobalBounds())){
-        p1.bump(p2, this);
-        p2.bump(p1, this);
+        p1.bump(p2, this, 0);
+        p2.bump(p1, this, 0);
     }
 
     if (p1.inertia.x > moveThreshold || p1.inertia.x < -moveThreshold){
@@ -84,6 +88,16 @@ int Game::update(){
     else if (p2.getPosition().y < -progression + p2.getGlobalBounds().height / 2)
         p2.setPosition(p2.getPosition().x, -progression + p2.getGlobalBounds().height / 2);
 
+    for (auto &entity : entities){
+        entity->update();
+        if (entity->getGlobalBounds().intersects(p1.getGlobalBounds())){
+            p1.bump(*entity, this, entity->getDamage());
+        }
+        if (entity->getGlobalBounds().intersects(p2.getGlobalBounds())){
+            p2.bump(*entity, this, entity->getDamage());
+        }
+    }
+
     tileProgress += speed;
     if (tileProgress >= tileMax){
         tileProgress -= tileMax;
@@ -97,7 +111,7 @@ int Game::update(){
     speed += acceleration;
     
     score.move(sf::Vector2f(0, -speed));
-    score.setString("Speed: " + std::to_string(speed) + " mph");
+    score.setString("Speed: " + std::to_string(speed).substr(0, 5) + " mph");
 
     return 0;
 }
@@ -121,6 +135,36 @@ void displayVector(const std::vector<bool>& vec) {
     std::cout << std::endl;
 }
 
+
+void Game::spawnObstacle(Tile *tile){
+    double r = dis(gen);
+    if (r < spawnChance){
+        double xMin = 0;
+        double xMax = 0;
+        double yMin = 0;
+        double yMax = 0;
+        u_int8_t i = 0;
+        for (auto road = tile->roads.begin(); road != tile->roads.end(); ++road){
+            double x = window->getSize().x / 2 - (nRoads / 2. - i) * roadWidth;
+            if (*road && xMin == 0)
+                xMin = x;
+            else if (!(*road) && xMin != 0){
+                xMax = x;
+                break;
+            }
+            i++;
+        }
+        xMin = xMin + spawnMargin * roadWidth;
+        xMax = xMax - spawnMargin * roadWidth;
+        yMin = tile->getPosition().y + spawnMargin * tileMax;
+        yMax = tile->getPosition().y + tileMax - spawnMargin * tileMax;
+        double x = xMin + (xMax - xMin) * dis(gen);
+        double y = yMin + (yMax - yMin) * dis(gen);
+        entities.push_back(std::make_unique<Tank>(x, y));
+    }
+}
+
+
 int Game::tileChange(){
 
     (*currentTile).move(sf::Vector2f(0, -3 * tileMax));
@@ -139,15 +183,6 @@ int Game::tileChange(){
         oldTileRoads.assign(transitionRoads.begin(), transitionRoads.end());
         r = 1;
     }
-
-    // std::cout << "beginning :\n";
-    // std::cout << "currentTile->roads : ";
-    // displayVector(currentTile->roads);
-    // std::cout << "oldTileRoads : ";
-    // displayVector(oldTileRoads);
-    // std::cout << "transitionRoads : ";
-    // displayVector(transitionRoads);
-    // std::cout << std::endl;
 
     if (r < changeChance){
         if (areEqual(oldTileRoads, std::vector<bool>{ false, true, true, true, false })){
@@ -196,18 +231,10 @@ int Game::tileChange(){
         transitionRoads = { false, false, false, false, false};
     }
 
-    // std::cout << "end :\n";
-    // std::cout << "currentTile->roads : ";
-    // displayVector(currentTile->roads);
-    // std::cout << "oldTileRoads : ";
-    // displayVector(oldTileRoads);
-    // std::cout << "transitionRoads : ";
-    // displayVector(transitionRoads);
-    // std::cout << std::endl;
-
     imagePath += ".png";
     currentTile->texture.loadFromFile(imagePath);
     currentTile->roads.assign(newRoads.begin(), newRoads.end());
+    spawnObstacle(currentTile);
 
     currentTile = getNextTile(currentTile);
 
@@ -224,14 +251,14 @@ Tile *Game::getNextTile(Tile *tile){
 }
 
 Player *Game::checkDeath(){
-    if (playerDeath(p1))
+    if (p1.getLife() <= 0 || playerFall(p1))
         return &p1;
-    else if (playerDeath(p2))
+    else if (p2.getLife() <= 0 || playerFall(p2))
         return &p2;
     return NULL;
 }
 
-const bool Game::playerDeath(Player &p){
+const bool Game::playerFall(Player &p){
     Tile *tile;
     if (p.getPosition().y >= currentTile->getPosition().y)
         tile = currentTile;
@@ -240,12 +267,11 @@ const bool Game::playerDeath(Player &p){
     else
         tile = getNextTile(getNextTile(currentTile));
     
-    double xMin, xMax;
-    xMin = 0;
-    xMax = 0;
+    double xMin = 0;
+    double xMax = 0;
     u_int8_t i = 0;
     for (auto road = tile->roads.begin(); road != tile->roads.end(); ++road){
-        double x = window->getSize().x / 2 - (nRoads / 2 - i) * roadWidth;
+        double x = window->getSize().x / 2 - (nRoads / 2. - i) * roadWidth;
         if (*road && xMin == 0)
             xMin = x;
         else if (!(*road) && xMin != 0){
@@ -319,9 +345,25 @@ double Tile::width(){
     return texture.getSize().x * getScale().x;
 }
 
-void Player::bump(const Player p, Game *game){
-    game->bumpSound.play();
-    inertia.x = (getPosition().x - p.getPosition().x) * XpushSpeed;
-    inertia.y = (getPosition().y - p.getPosition().y) * YpushSpeed;
+
+void Player::update(Game *game){
+    move(sf::Vector2f(0, -game->getSpeed()));
+    setTexture(textures[5-life]);
 }
 
+
+void Player::bump(const sf::Sprite obstacle, Game *game, u_int8_t damage){
+    if (damage > 0){
+        game->bimSound.play();
+    } else {
+        game->bumpSound.play();
+    }
+    game->bumpSound.play();
+    inertia.x += (getPosition().x - obstacle.getPosition().x) * XpushSpeed / (getGlobalBounds().width + obstacle.getGlobalBounds().width);
+    inertia.y += (getPosition().y - obstacle.getPosition().y) * YpushSpeed / (getGlobalBounds().height + obstacle.getGlobalBounds().height);
+    life -= damage;
+}
+
+const int Player::getLife(){
+    return life;
+}
