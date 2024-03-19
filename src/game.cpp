@@ -14,16 +14,47 @@
 Tile::Tile():
     roads { false, true, true, true, false }
 {
-    texture.loadFromFile("../images/map/road_3.png");
-    setTexture(texture);
+    roadNbTable["road_3"] = 0;
+    roadNbTable["road_3_to_2_right"] = 1;
+    roadNbTable["road_3_to_2_left"] = 2;
+    roadNbTable["road_2_right_to_3"] = 3;
+    roadNbTable["road_2_left_to_3"] = 4;
+    roadNbTable["road_2_right"] = 5;
+    roadNbTable["road_2_left"] = 6;
+
+    textures[0].loadFromFile("../images/map/road_3.png");
+    textures[1].loadFromFile("../images/map/road_3_to_2_right.png");
+    textures[2].loadFromFile("../images/map/road_3_to_2_left.png");
+    textures[3].loadFromFile("../images/map/road_2_right_to_3.png");
+    textures[4].loadFromFile("../images/map/road_2_left_to_3.png");
+    textures[5].loadFromFile("../images/map/road_2_right.png");
+    textures[6].loadFromFile("../images/map/road_2_left.png");
+
+    roadNb = 0;
+    setTexture(textures[roadNbTable["road_3"]]);
 }
 
-double Tile::height(){
-    return texture.getSize().y * getScale().y;
+const uint8_t Tile::getRoadNb(){
+    return roadNb;
 }
 
-double Tile::width(){
-    return texture.getSize().x * getScale().x;
+const double Tile::getHeight(){
+    return textures[0].getSize().y * getScale().y;
+}
+
+const double Tile::getWidth(){
+    return textures[0].getSize().x * getScale().x;
+}
+
+void Tile::setRoads(std::vector<bool> newRoads){
+    roads.assign(newRoads.begin(), newRoads.end());
+}
+
+void Tile::setRoadNb(std::string roadString){
+    if (roadNbTable[roadString] != roadNb){
+        roadNb = roadNbTable[roadString];
+        setTexture(textures[roadNb]);
+    }
 }
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -104,13 +135,13 @@ Game::Game(sf::RenderWindow * w, bool solo, uint8_t difficulty):
         p2.loseLife(4);
     }
 
-    double tileScale = window->getSize().x / tile1.width();
+    double tileScale = window->getSize().x / tile1.getWidth();
 
     tile1.setScale(tileScale, tileScale);
     tile2.setScale(tileScale, tileScale);
     tile3.setScale(tileScale, tileScale);
 
-    tileMax = tile1.height();
+    tileMax = tile1.getHeight();
     currentTile = &tile1;
 
     tile1.setPosition(sf::Vector2f(0, window->getSize().y - tileMax));
@@ -244,19 +275,12 @@ bool Game::updateTile(){
     return false;
 }
 
-bool Game::newTileVisible(){
-    return currentTile->getPosition().y + tileMax > 0;
-}
-
-void Game::catchProgression(int cycle){
-    progression += cycle * (speed - cycle * progression) + cycle*(cycle+1)*acceleration/2;
-}
 
 int Game::tileChange(){
 
     (*currentTile).move(sf::Vector2f(0, -3 * tileMax));
 
-    std::string imagePath = "../images/map/road_";
+    std::string roadString = "road_";
     std::vector<bool> newRoads;
     std::vector<bool> oldTileRoads;
     double r;
@@ -273,25 +297,25 @@ int Game::tileChange(){
 
     if (r < changeChance){
         if (areEqual(oldTileRoads, std::vector<bool>{ false, true, true, true, false })){
-            imagePath += "3_to_";
+            roadString += "3_to_";
             if (r < changeChance / 2){
-                imagePath += "2_right";
+                roadString += "2_right";
                 newRoads = { false, false, true, true, false };
                 transitionRoads.assign(newRoads.begin(), newRoads.end());
             }
             else{
-                imagePath += "2_left";
+                roadString += "2_left";
                 newRoads = { false, true, true, false, false };
                 transitionRoads.assign(newRoads.begin(), newRoads.end());
             }
         }
         else if (areEqual(oldTileRoads, std::vector<bool>{ false, false, true, true, false })){
-            imagePath += "2_right_to_3";
+            roadString += "2_right_to_3";
             newRoads = { false, false, true, true, false };
             transitionRoads = { false, true, true, true, false };
         }
         else if (areEqual(oldTileRoads, std::vector<bool>{ false, true, true, false, false })){
-            imagePath += "2_left_to_3";
+            roadString += "2_left_to_3";
             newRoads = { false, true, true, false, false };
             transitionRoads = { false, true, true, true, false };
         }
@@ -301,15 +325,15 @@ int Game::tileChange(){
     }
     else{
         if (areEqual(oldTileRoads, std::vector<bool>{ false, true, true, true, false })){
-            imagePath += "3";
+            roadString += "3";
             newRoads = { false, true, true, true, false };
         }
         else if (areEqual(oldTileRoads, std::vector<bool>{ false, false, true, true, false })){
-            imagePath += "2_right";
+            roadString += "2_right";
             newRoads = { false, false, true, true, false };
         }
         else if (areEqual(oldTileRoads, std::vector<bool>{ false, true, true, false, false })){
-            imagePath += "2_left";
+            roadString += "2_left";
             newRoads = { false, true, true, false, false };
         }
         else{
@@ -318,9 +342,8 @@ int Game::tileChange(){
         transitionRoads = { false, false, false, false, false};
     }
 
-    imagePath += ".png";
-    currentTile->texture.loadFromFile(imagePath);
-    currentTile->roads.assign(newRoads.begin(), newRoads.end());
+    currentTile->setRoadNb(roadString);
+    currentTile->setRoads(newRoads);
     spawnObstacle(currentTile);
 
     currentTile = getNextTile(currentTile);

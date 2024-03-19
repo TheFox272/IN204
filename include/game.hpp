@@ -5,6 +5,7 @@
 #include <random>
 #include <string>
 #include <thread>
+#include <unordered_map>
 
 #include <SFML/Graphics.hpp>
 
@@ -15,20 +16,32 @@
 
 class Game;
 
+
 class Tile: public sf::Sprite
 {
+    private:
+        // The hash table to convert the string to the road number
+        std::unordered_map<std::string, uint8_t> roadNbTable;
+        // The textures of the tile
+        sf::Texture textures[7];
+        // The current road number
+        uint8_t roadNb;
     public:
-        sf::Texture texture;
+        // The roads of the tile
         std::vector<bool> roads;
 
         // Constructor
         Tile();
 
         // Getters
-        double height();
-        double width();
+        const uint8_t getRoadNb();
+        const double getHeight();
+        const double getWidth();
 
         // Setters
+        void setRoads(std::vector<bool>);
+        void setRoadNb(std::string);
+
         ~Tile()
         {}
 };
@@ -125,8 +138,6 @@ class Game
 
         // Tile management
         bool updateTile();
-        bool newTileVisible();
-        void catchProgression(int);
         int tileChange();
         Tile *getNextTile(Tile *);
         
