@@ -95,6 +95,7 @@ class Game
         // Whether the game is paused or not
         bool paused;
         bool wasPaused;
+        // Whether the game is over or not
         // Progression of the tile
         double tileProgress;
         double tileMax;
@@ -110,6 +111,7 @@ class Game
         // Check weither a player is out of the road or not
         SoundType playerFall(Player &);
     public:
+        bool gameover;
         Player p1;
         Player p2;
         HpBar hpBar1;

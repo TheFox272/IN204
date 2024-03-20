@@ -27,17 +27,16 @@ int play(bool singlePlayer, uint8_t difficulty)
     {
         if (!game.getPaused())
         {
-            game.update();
-            if (game.updateTile())
+            if (!game.gameover)
             {
-                game.tileChange();
+                if (game.updateTile())
+                {
+                    game.tileChange();
+                }
+                mainView.move(0, -game.getSpeed());
+                window.setView(mainView);
             }
-            mainView.move(0, -game.getSpeed());
-            window.setView(mainView);
-        }
-        else
-        {
-            game.updatePause();
+            game.update();
         }
 
         sf::Event event;

@@ -97,8 +97,9 @@ Game::Game(sf::RenderWindow * w, bool solo, uint8_t difficulty):
     tileProgress(0),
     transitionRoads {false, false, false, false, false},
     window(w),
-    p1(solo ? window->getSize().x * 0.5 : window->getSize().x * 0.4, window->getSize().y * 0.7, true),
-    p2(solo ? window->getSize().x * 0.8 : window->getSize().x * 0.6, window->getSize().y * 0.3, false),
+    gameover(false),
+    p1(window->getSize().x * (solo ? 0.5 : 0.4), window->getSize().y * 0.7, true),
+    p2(window->getSize().x * (solo ? 0.8 : 0.6), window->getSize().y * (solo ? 0.3 : 0.7), false),
     hpBar1(sf::Vector2f(200, 150), true),
     hpBar2(sf::Vector2f(200, 270), false),
     score(sf::Vector2f(10.f, 10.f))
@@ -150,16 +151,22 @@ Game::Game(sf::RenderWindow * w, bool solo, uint8_t difficulty):
 }
 
 int Game::updatePause(){
+    
+    return 0;
+}
+
+int Game::update(){
+
     if (explosion.is_displayed){
         sf::sleep(sf::milliseconds(10));
         if (!explosion.update()){
             explosion.is_displayed = false;
         }
     }
-    return 0;
-}
 
-int Game::update(){
+    if (gameover){
+        return -1;
+    }
 
     speed += acceleration;
     progression += speed;
@@ -401,7 +408,8 @@ SoundType Game::playerFall(Player &p){
 
 int Game::gameOver(Player *deadPlayer){
 
-    pause();
+    gameover = true;
+    music.stop();
     addExplosion(deadPlayer->getPosition());
     deadPlayer->setColor(sf::Color(255, 255, 255, 0));
     std::cout << "Player " << ((deadPlayer == &p1) ? 1 : 2) << " died..." << std::endl;
@@ -430,7 +438,8 @@ int Game::resume(){
         wasPaused = false;
     else{
         paused = false;
-        music.play();
+        if (!gameover)
+            music.play();
     }
     return 0;
 }
