@@ -113,13 +113,13 @@ Game::Game(sf::RenderWindow * w, bool solo, uint8_t difficulty):
     }
     else if (difficulty == 2){
         speed = 7;
-        acceleration = 0.005f;
+        acceleration = 0.002f;
         spawnChance = 0.5f;
         changeChance = 0.5f;
     }
     else{
         speed = 10;
-        acceleration = 0.01f;
+        acceleration = 0.004f;
         spawnChance = 0.7f;
         changeChance = 0.7f;
     }
